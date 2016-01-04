@@ -1,0 +1,37 @@
+{
+  "name": "fisdap/aiken-parser",
+  "description": "Aiken parsing library in PHP",
+  "keywords": ["fisdap", "aiken"],
+  "license": "MIT",
+  "type": "library",
+  "authors": [
+    {
+      "name": "Jason Michels",
+      "email": "jmichels@fisdap.net"
+    }
+  ],
+  "require": {
+    "php": ">=5.6"
+  },
+  "require-dev": {
+    "monolog/monolog": "^1.17",
+    "phing/phing": "^2.13",
+    "phpunit/phpunit": "^5.1",
+    "mockery/mockery": "0.9.*",
+    "halleck45/php-metrics": "dev-master",
+    "squizlabs/php_codesniffer": "dev-master",
+    "sebastian/phpcpd": "*",
+    "phpmd/phpmd" : "@stable"
+  },
+  "autoload": {
+    "psr-4": {
+      "Fisdap\\Aiken\\Parser\\": "src",
+      "Fisdap\\Aiken\\Parser\\Tests\\": "tests"
+    }
+  },
+  "config": {
+    "preferred-install": "dist"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}

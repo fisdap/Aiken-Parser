@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Aiken Parser" basedir="." default="check">
+
+    <property name="dir.base" value="${project.basedir}" />
+    <property name="dir.src" value="${project.basedir}/src"/>
+
+    <property name="dir.build" value="${project.basedir}/build"/>
+    <property name="dir.docs" value="${dir.build}/docs"/>
+    <property name="dir.reports" value="${dir.build}/logs"/>
+    <property name="dir.reports.phpmetric" value="${dir.reports}/phpmetrics"/>
+    <property name="dir.reports.coverage" value="${dir.reports}/coverage"/>
+
+    <property name="dir.vendor" value="${project.basedir}/vendor" />
+    <property name="bin.composer.failMessage" value="Could not find composer. Please make a composer.phar executable available either in path or project root. See: http://getcomposer.org/download/ for details."/>
+
+    <!-- Filesets -->
+    <fileset id="sourcecode" dir="${dir.src}">
+        <include name="**/*.php"/>
+    </fileset>
+
+    <!-- Default target -->
+    <target name="main">
+        <echo msg="See:"/>
+        <echo msg=" * phing -l"/>
+    </target>
+
+    <!--******************************************************************************************-->
+
+    <!--
+       Check Target
+       Runs all quality check sub-targets
+   -->
+    <target name="check" description="Runs all quality check sub-targets" >
+        <phingcall target="check:phpmetrics" />
+        <phingcall target="check:cs" />
+        <phingcall target="check:cpd" />
+        <phingcall target="check:md" />
+    </target>
+
+    <!--Create Upload folder-->
+    <target name="build:folders:create" description="Create necessary build folders">
+        <mkdir dir="${dir.build}" />
+        <mkdir dir="${dir.docs}" />
+        <mkdir dir="${dir.reports}" />
+        <mkdir dir="${dir.reports.phpmetric}" />
+        <mkdir dir="${dir.reports.coverage}" />
+        <phingcall target="build:storage:set-permissions" />
+    </target>
+
+    <!--Test application-->
+    <target name="test" description="Run application tests">
+        <exec passthru="true" checkreturn="true" command="vendor/bin/phpunit" />
+    </target>
+
+    <!--******************************************************************************************-->
+
+    <target name="test:coverage">
+        <exec passthru="true" checkreturn="true" command="vendor/bin/phpunit --coverage-html ${dir.reports.coverage}" />
+    </target>
+
+    <!-- Composer install -->
+    <target name="composer:install" depends="detect-composerbin">
+        <exec passthru="true" checkreturn="true" command="${bin.composer} install --verbose --no-interaction"/>
+    </target>
+
+    <!--Composer Update-->
+    <target name="composer:update" depends="detect-composerbin">
+        <exec passthru="true" checkreturn="true" command="${bin.composer} update --verbose --no-interaction"/>
+    </target>
+
+    <!-- Composer dump-autoload -->
+    <target name="build:dependencies:cache"
+            depends="detect-composerbin">
+        <exec passthru="true" checkreturn="true" command="${bin.composer} dump-autoload --optimize" />
+    </target>
+
+    <!-- PHP Metrics -->
+    <target name="check:phpmetrics" >
+        <exec passthru="true" checkreturn="true" command="vendor/bin/phpmetrics --report-html=${dir.reports.phpmetric}/choice.html ${dir.src}" />
+    </target>
+
+    <!-- PSR2 Codesniffer -->
+    <target name="check:cs">
+        <echo msg="Checking coding standard ..."/>
+        <exec passthru="true" checkreturn="false" command="vendor/bin/phpcs -s -p --standard=PSR2 --report-full=${dir.reports}/checkstyle.txt ${dir.src}" />
+    </target>
+
+    <!-- copy/paste detector -->
+    <target name="check:cpd">
+        <echo msg="Checking similar code blocks ..."/>
+        <exec passthru="true" checkreturn="false" command="vendor/bin/phpcpd --progress --log-pmd=${dir.reports}/pmd-cpd.xml ${dir.src}" />
+    </target>
+
+    <!-- Mess detector -->
+    <target name="check:md">
+        <echo msg="Generating mess detector code metrics ..."/>
+        <exec passthru="true" checkreturn="false" command="vendor/bin/phpmd ${dir.src} html codesize,unusedcode,design,naming --reportfile ${dir.reports}/pmd.html --suffixes .php" />
+    </target>
+
+    <!-- Set permission of storage folder -->
+    <target name="build:storage:set-permissions">
+        <exec command="chmod -R a+rwX ${dir.build}"/>
+        <exec command="chmod -R a+rwX ${dir.docs}"/>
+        <exec command="chmod -R a+rwX ${dir.reports}"/>
+        <exec command="chmod -R a+rwX ${dir.reports.phpmetric}"/>
+        <exec command="chmod -R a+rwX ${dir.reports.coverage}"/>
+    </target>
+
+    <!-- Internal target to get the correct composer bin file to use
+         First try composer.phar in the project directory
+         Then try 'composer.phar' or 'composer' in the path, using `which`
+         -->
+    <target name="detect-composerbin" hidden="true">
+        <if>
+            <available file="${bin.composer}"/>
+            <else>
+                <exec command="which composer.phar" outputProperty="bin.composer"/>
+                <if>
+                    <equals arg1="${bin.composer}" arg2=""/>
+                    <then>
+                        <exec command="which composer" outputProperty="bin.composer"/>
+                        <if>
+                            <equals arg1="${bin.composer}" arg2=""/>
+                            <then>
+                                <fail message="${bin.composer.failMessage}"/>
+                            </then>
+                        </if>
+                    </then>
+                </if>
+            </else>
+        </if>
+        <echo msg="Using composer at '${bin.composer}'"/>
+    </target>
+
+</project>
