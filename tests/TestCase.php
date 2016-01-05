@@ -7,7 +7,7 @@ use PHPUnit_Framework_TestCase;
  *
  * Base test case
  *
- * @package ShippingSteam\Tests
+ * @package Fisdap\Aiken\Parser\Tests
  * @author Jason Michels
  * @version $Id$
  */
