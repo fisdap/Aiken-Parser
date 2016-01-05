@@ -3,6 +3,18 @@
 ### Introduction
 This PHP library will parse a file in Aiken format to an array
 
+### Example
+```php
+require('./vendor/autoload.php');
+
+$file = './examples/aiken.txt';
+
+$aiken = new \Fisdap\Aiken\Parser\AikenParser($file);
+$itemCollection = $aiken->buildTestItemCollection();
+
+var_dump($itemCollection->toArray());
+```
+
 ### Testing
 ```sh
 $ phpunit
