@@ -39,9 +39,13 @@ class DistractorCollection implements Arrayable
      */
     public function getCorrectAnswerValue($key)
     {
-        foreach ($this->distractors as $distractor) {
-            if ($distractor->key == $key) {
-                return $distractor->value;
+        for ($i = 0; $i < count($this->distractors); $i++) {
+            if ($this->distractors[$i]->key == $key) {
+                $value = $this->distractors[$i]->value;
+
+                unset($this->distractors[$i]);
+
+                return $value;
             }
         }
 
