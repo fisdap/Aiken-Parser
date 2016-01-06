@@ -74,18 +74,30 @@ class AikenParser
      */
     protected function isCorrectAnswer($line)
     {
-        return strpos($line, TestItem::CORRECT_ANSWER_LINE_DETECTOR_SLUG) === 0 ? true : false;
+        foreach (TestItem::$correctAnswerDetectorSlugs as $slug) {
+            if (strpos($line, $slug) === 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
      * Parse the correct answer from the line
      *
-     * @param string $line
+     * @param $line
      * @return string
+     * @throws \Exception
      */
     protected function parseCorrectAnswerKey($line)
     {
-        return trim(substr($line, strlen(TestItem::CORRECT_ANSWER_LINE_DETECTOR_SLUG)));
+        foreach (TestItem::$correctAnswerDetectorSlugs as $slug) {
+            if (strpos($line, $slug) === 0) {
+                return trim(substr($line, strlen($slug)));
+            }
+        }
+
+        throw new \Exception('Unable to parse the correct answer from this line: ' . $line);
     }
 
     /**

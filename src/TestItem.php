@@ -18,10 +18,21 @@ class TestItem implements Arrayable
     const DISTRACTORS = 'distractors';
 
     const CORRECT_ANSWER_LINE_DETECTOR_SLUG = 'ANSWER: ';
+    const CORRECT_ANSWER_LINE_DETECTOR_SLUG_SPANISH = 'RESPUESTA: ';
     const DISTRACTOR_A_LINE_DETECTOR_SLUG = 'A. ';
     const DISTRACTOR_B_LINE_DETECTOR_SLUG = 'B. ';
     const DISTRACTOR_C_LINE_DETECTOR_SLUG = 'C. ';
     const DISTRACTOR_D_LINE_DETECTOR_SLUG = 'D. ';
+
+    /**
+     * Correct answer detector slugs
+     *
+     * @var array
+     */
+    public static $correctAnswerDetectorSlugs = [
+        self::CORRECT_ANSWER_LINE_DETECTOR_SLUG,
+        self::CORRECT_ANSWER_LINE_DETECTOR_SLUG_SPANISH
+    ];
 
     /**
      * Keys used to define distractors from the answer
