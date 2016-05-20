@@ -49,7 +49,9 @@ class DistractorCollection implements Arrayable
             }
         }
 
-        throw new \Exception('Unable to match correct answer ' . $key . ' to distractors');
+        $implodedDistractors = implode(' => ', $this->toArray());
+
+        throw new \Exception('Unable to match correct answer ' . $key . ' to distractors. An issue exists with the question that has these distractors: ' . $implodedDistractors);
     }
 
     /**
