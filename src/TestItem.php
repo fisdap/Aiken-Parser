@@ -125,15 +125,15 @@ class TestItem implements Arrayable
     public function validate()
     {
         if (count($this->getDistractorCollection()->toArray()) < 3) {
-            throw new \Exception('Something is wrong with the formatting of this item.  Check to make sure the distractors do not have any extra space before or after the beginning letter. Look at the item with STEM: ' . $this->stem);
+            throw new \Exception('Your Items were not imported.  Something is wrong with the formatting of this item.  Check to make sure the distractors do not have any extra space before or after the beginning letter. Look at the item with STEM: ' . $this->stem);
         }
 
         if (empty($this->stem)) {
-            throw new \Exception('A question is missing a stem. Please review the format of your Aiken file and upload again.');
+            throw new \Exception('Your Items were not imported.  A question is missing a stem. Please review the format of your Aiken file and upload again.');
         }
 
         if (empty($this->correctAnswer)) {
-            throw new \Exception('This question does not have a correct answer.  Check to make sure the distractors do not have any extra space before or after the beginning letter. Look at the item with STEM: ' . $this->stem);
+            throw new \Exception('Your Items were not imported.  This question does not have a correct answer.  Check to make sure the distractors do not have any extra space before or after the beginning letter. Look at the item with STEM: ' . $this->stem);
         }
     }
 
