@@ -125,7 +125,7 @@ class TestItem implements Arrayable
     public function validate()
     {
         if (count($this->getDistractorCollection()->toArray()) < 3) {
-            throw new \Exception('Your Items were not imported.  Something is wrong with the formatting of this item.  Check to make sure the distractors do not have any extra space before or after the beginning letter. Look at the item with STEM: ' . $this->stem);
+            throw new \Exception('Error processing request: An issue was encountered with the distractors that have this stem ' . $this->stem . ' - Please check this file for leading and trailing spaces. No items were imported.');
         }
 
         if (empty($this->stem)) {
