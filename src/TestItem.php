@@ -138,6 +138,18 @@ class TestItem implements Arrayable
     }
 
     /**
+     * Validate that a test item does not have too many distractors
+     *
+     * @throws \Exception
+     */
+    public function validateDoesNotHaveTooManyDistractors()
+    {
+        if (count($this->getDistractorCollection()->toArray()) > 4) {
+            throw new \Exception('An issue was encountered with the following text: ' . $this->stem . '.  This stem has too many distractors. Check that an ANSWER is not missing from previous test item.');
+        }
+    }
+
+    /**
      * Return object as array
      *
      * @return array

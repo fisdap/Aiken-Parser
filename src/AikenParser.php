@@ -49,6 +49,7 @@ class AikenParser
             foreach ($lines as $line) {
 
                 if ($this->isCorrectAnswer($line)) {
+                    $testItem->validateDoesNotHaveTooManyDistractors();
                     $testItem->setCorrectAnswer($this->parseCorrectAnswerKey($line));
 
                     $this->testItemCollection->append($testItem);
